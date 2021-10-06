@@ -1,0 +1,110 @@
+SQL
+
+A declarative programming language (mostly). 
+
+SQL Optimizer: Component of the platform that parses the query, generates low-level procedural code, find the best execution path, and sends it to the engine for execution. 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Main Components of the Language
+
+1. Data Definition Language (DDL): Allows you to create or modify data structures and objects.
+- CREATE: create table sales (purchase_number INT);
+- ALTER (ADD, REMOVE, RENAME): alter table sales add column date_of_purchase DATE;
+- DROP: drop table customers;
+- RENAME: rename table customers to customer_data;
+- TRUNCATE (Removes all entries from the table): truncate table customers;
+
+2. Data Manipulation Language (DML): Manipulat data in database objects (e.g. tables)
+- SELECT: select * from sales;
+- INSERT: inserts into sales (purchase_number, date_of_purchase) values (1, '2017-10-11');
+Equivalently, insert into sales values (1, '2017-10-11');
+- UPDATE: update sales set date_of_purchase = '2017-12-12' where purchase_number = 1; 
+- DELETE: delete from sales; (== truncate table sales)
+
+3. Data Control Languagel (DCL): Manage rights users have to the db. 
+- GRANT|REVOKE: grant|revoke permission_type on db_name.table_name to 'username'@'server'
+
+4. Transaction Control Language (TCL): Saves your changes. Related to INSERT/UPDATE/DELETE statements. 
+- COMMIT;
+- ROLLBACK; (rever to the last non-committed state)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Relational vs Non-Relational DBs
+
+Relational: Organize (compact, well-structured) huge amounts of data for fast retrieval (efficient). 
+Non-relational:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Relational vs Spreadsheets
+
+Spreadsheet: An electronic ledger. 
+- Excel cant handle >1M rows
+- Limited sharability and access controls (e.g. lower data consistency and data integrity)
+- Less performant
+
+Similarities: Contain tabular data, can compute on the data, used by many users.
+Differences: Spreadsheet cells can contain any data and can have formatting. In DBs, you have to pre-set field attributes like datatype. 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Database design + creation + manipulation = insights
+
+Primary key: unique, non-null field that identifies records for that table. 
+- unique + non-null. 
+- 1/table. 
+Foreign key: possibly duplicate, possibly null field that identifies relations between 2 tables. 
+Unique key: A field that is not primary or foreign key, but has the uniqueness constraint. 
+
+CREATE DATABASE IF NOT EXISTS dbname;
+USE dbname;
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+string datatypes
+- char(N): fixed-size (e.g. company acronym). 
+- varchar(N): variable-size, (e.g. password field).
+- enum('val1','val2',...,'valN').
+
+numeric datatypes
+1. intergers: Signed by default. 
+- TINYINT: 1B
+- SMALLINT: 2B
+- MEDIUMINT: 3B
+- INT: 4B
+- BIGINT: 8B
+
+2. fixed-point:
+- DECIMAL(P, S): P is the precision (total # digits) and S is the scale (# digits after radix). 
+-- Important: MySQL rounds up if input is too precise! MySQL also fills in 0s if input is too imprecise.
+-- Note: DECIMAL(7) == DECIMAL(7,0)
+- NUMERIC: Same as DECIMAL. 
+
+3. floating-point: Approximate values only. Goal is to balance precision and range. 
+- FLOAT(P,S): 4B (single-precision)
+- DOUBLE(P,S): 8B (double-precision)
+
+date datatype
+- DATE: YYYY-MM-DD
+- DATETIME: YYYY-MM-DD HH:MM:SS[.fraction]
+- TIMESTAMP: Number of seconds after (easier to compute durations). Better for timezones. 
+
+binary datatype
+- BLOB: 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+create table table_name 
+(
+	column1 datatype constraints,
+	column2 datatype constraints,
+	...
+	columnN datatype constraints
+);
+
+or 
+
+create table table_name 
+(
+	column1 datatype constraints,
+	column2 datatype constraints,
+	...
+	columnN datatype constraints
+PRIMARY KEY (columnI)
+);
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Constraints
+
+AUTO_INCREMENT only works on primary keys and indexes
+
+Primary key(
